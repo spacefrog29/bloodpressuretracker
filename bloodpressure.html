@@ -33,34 +33,52 @@
             border-left: 4px solid #007bff;
         }
         
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
         .input-group {
-            display: inline-block;
-            margin-right: 15px;
-            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            min-width: 120px;
+            flex: 1;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: end;
         }
         
         label {
-            display: block;
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
             color: #555;
+            font-size: 14px;
         }
         
         input {
-            padding: 8px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            width: 120px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
         }
         
         button {
             background: #007bff;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
+            white-space: nowrap;
         }
         
         button:hover {
@@ -69,17 +87,23 @@
         
         .export-btn {
             background: #28a745;
-            margin-left: 10px;
         }
         
         .export-btn:hover {
             background: #1e7e34;
         }
         
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            min-width: 600px;
         }
         
         th, td {
@@ -117,8 +141,9 @@
         }
         
         .stats {
-            display: flex;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
             margin: 20px 0;
         }
         
@@ -126,8 +151,8 @@
             background: #e3f2fd;
             padding: 15px;
             border-radius: 5px;
-            flex: 1;
             text-align: center;
+            min-width: 0;
         }
         
         .stat-value {
@@ -141,6 +166,70 @@
             color: #666;
             margin-top: 5px;
         }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .input-group {
+                min-width: auto;
+            }
+            
+            .button-group {
+                justify-content: center;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .stat-value {
+                font-size: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+                text-align: center;
+            }
+            
+            th, td {
+                padding: 8px 4px;
+                font-size: 14px;
+            }
+            
+            .delete-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-section {
+                padding: 10px;
+            }
+            
+            th, td {
+                padding: 6px 3px;
+                font-size: 12px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -148,23 +237,25 @@
         <h1>Blood Pressure Tracker</h1>
         
         <div class="input-section">
-            <div class="input-group">
-                <label for="date">Date:</label>
-                <input type="date" id="date">
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date">
+                </div>
+                <div class="input-group">
+                    <label for="systolic">Systolic:</label>
+                    <input type="number" id="systolic" placeholder="120" min="70" max="250">
+                </div>
+                <div class="input-group">
+                    <label for="diastolic">Diastolic:</label>
+                    <input type="number" id="diastolic" placeholder="80" min="40" max="150">
+                </div>
+                <div class="input-group">
+                    <label for="heartRate">Heart Rate:</label>
+                    <input type="number" id="heartRate" placeholder="72" min="40" max="200">
+                </div>
             </div>
-            <div class="input-group">
-                <label for="systolic">Systolic:</label>
-                <input type="number" id="systolic" placeholder="120" min="70" max="250">
-            </div>
-            <div class="input-group">
-                <label for="diastolic">Diastolic:</label>
-                <input type="number" id="diastolic" placeholder="80" min="40" max="150">
-            </div>
-            <div class="input-group">
-                <label for="heartRate">Heart Rate:</label>
-                <input type="number" id="heartRate" placeholder="72" min="40" max="200">
-            </div>
-            <div class="input-group">
+            <div class="button-group">
                 <button onclick="addReading()">Add Reading</button>
                 <button class="export-btn" onclick="exportToCSV()">Export CSV</button>
             </div>
@@ -189,28 +280,31 @@
             </div>
         </div>
         
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Systolic</th>
-                    <th>Diastolic</th>
-                    <th>Heart Rate</th>
-                    <th>BP Category</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Systolic</th>
+                        <th>Diastolic</th>
+                        <th>Heart Rate</th>
+                        <th>BP Category</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // *** REPLACE THESE WITH YOUR SUPABASE DETAILS ***
+      
+      // *** REPLACE THESE WITH YOUR SUPABASE DETAILS ***
         const SUPABASE_URL = 'https://whkqkhgiprgklpntefvs.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indoa3FraGdpcHJna2xwbnRlZnZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3MjUzOTgsImV4cCI6MjA3MjMwMTM5OH0.YL53xPhzl21GeYhP3Waw5-qT47tuVzZ-FmrPjJARdhE';
-        
+              
         // Initialize Supabase client
         let supabase;
         let readings = [];
@@ -386,8 +480,9 @@
             document.getElementById('systolic').value = '';
             document.getElementById('diastolic').value = '';
             document.getElementById('heartRate').value = '';
-            // Keep today's date
-            document.getElementById('date').valueAsDate = new Date();
+            // Keep today's date or move to next day if already entered today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
         }
         
         function exportToCSV() {
@@ -425,6 +520,32 @@
                 addReading();
             }
         });
+        
+        // Add loading indicator
+        function showLoading() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loading';
+            loadingDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.8);
+                color: white;
+                padding: 20px;
+                border-radius: 5px;
+                z-index: 1000;
+            `;
+            loadingDiv.textContent = 'Loading data...';
+            document.body.appendChild(loadingDiv);
+        }
+        
+        function hideLoading() {
+            const loading = document.getElementById('loading');
+            if (loading) {
+                loading.remove();
+            }
+        }
     </script>
 </body>
 </html>
