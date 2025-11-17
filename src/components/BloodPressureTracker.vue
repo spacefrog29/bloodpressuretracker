@@ -74,10 +74,11 @@
         <thead>
           <tr>
             <th>Date</th>
+            <th>BP Category</th>
             <th>Systolic</th>
             <th>Diastolic</th>
             <th>Heart Rate</th>
-            <th>BP Category</th>
+            
             <th>Action</th>
           </tr>
         </thead>
@@ -89,12 +90,13 @@
           </tr>
           <tr v-for="reading in readings" :key="reading.id">
             <td>{{ formatDate(reading.date) }}</td>
-            <td>{{ reading.systolic }}</td>
-            <td>{{ reading.diastolic }}</td>
-            <td>{{ reading.heartRate }}</td>
             <td :class="getCategoryClass(reading.category)">
               {{ reading.category }}
             </td>
+            <td>{{ reading.systolic }}</td>
+            <td>{{ reading.diastolic }}</td>
+            <td>{{ reading.heartRate }}</td>
+            
             <td>
               <button class="delete-btn" @click="deleteReading(reading.id)">
                 Delete
