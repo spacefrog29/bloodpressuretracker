@@ -4,6 +4,7 @@
       <h1>Blood Pressure Tracker</h1>
       <div class="nav-links">
         <router-link to="/">Dashboard</router-link>
+        <router-link to="/chart">Chart</router-link>
         <router-link to="/admin">Admin</router-link>
         <button class="logout-btn" @click="handleLogout">Logout</button>
       </div>

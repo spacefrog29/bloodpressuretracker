@@ -19,6 +19,12 @@ const routes = [
     name: 'Admin',
     component: () => import('../views/AdminView.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/chart',
+    name: 'Chart',
+    component: () => import('../views/ChartView.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 
