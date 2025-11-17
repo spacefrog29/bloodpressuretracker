@@ -92,7 +92,9 @@
             <td>{{ reading.systolic }}</td>
             <td>{{ reading.diastolic }}</td>
             <td>{{ reading.heartRate }}</td>
-            <td>{{ reading.category }}</td>
+            <td :class="getCategoryClass(reading.category)">
+              {{ reading.category }}
+            </td>
             <td>
               <button class="delete-btn" @click="deleteReading(reading.id)">
                 Delete
@@ -130,6 +132,17 @@ const getBPCategory = (systolic, diastolic) => {
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('en-GB')
+}
+
+const getCategoryClass = (category) => {
+  const classMap = {
+    'Normal': 'bp-normal',
+    'Elevated': 'bp-elevated',
+    'Stage 1 High': 'bp-stage1',
+    'Stage 2 High': 'bp-stage2',
+    'Crisis': 'bp-crisis'
+  }
+  return classMap[category] || ''
 }
 
 const avgSystolic = computed(() => {
@@ -282,3 +295,46 @@ onMounted(() => {
   loadReadings()
 })
 </script>
+
+<style scoped>
+/* BP Category Color Coding */
+.bp-normal {
+  background-color: #d4edda;
+  color: #155724;
+  font-weight: 600;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.bp-elevated {
+  background-color: #fff3cd;
+  color: #856404;
+  font-weight: 600;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.bp-stage1 {
+  background-color: #ffe5cc;
+  color: #cc5500;
+  font-weight: 600;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.bp-stage2 {
+  background-color: #f8d7da;
+  color: #721c24;
+  font-weight: 600;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.bp-crisis {
+  background-color: #dc3545;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 8px;
+  border-radius: 4px;
+}
+</style>
